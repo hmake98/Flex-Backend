@@ -14,9 +14,6 @@ AWS.config.update({
   accessKeyId: accessKey,
   secretAccessKey: sharedSecret,
   region: region,
-  apiVersions: {
-    s3: process.env.AWS_S3_API_VERSION,
-  },
   signatureVersion: 'v4',
 });
 
@@ -30,25 +27,21 @@ awsUtils.uploadPublicImageToS3 = (file, storagePath) => {
       const newFilename = `${utils.getTime()}${extension}`;
       const newPath = storagePath + newFilename;
       const myBucket = process.env.BUCKET_NAME;
-      fs.readFile(file.path, (err, data) => {
-        if (err) {
-          throw err;
+      const params = {
+        Bucket: myBucket,
+        Key: newPath,
+        Body: fs.createReadStream(file.path),
+        ContentEncoding: 'base64',
+        ACL: 'public-read',
+        ContentType: file.type,
+      };
+      s3.putObject(params, (error, result) => {
+        logger.info('Success Uploaded Image Result on S3', result);
+        if (error) {
+          logger.error('Error Uploaded Image Result on S3', error);
+          return reject(error);
         }
-        const params = {
-          Bucket: myBucket,
-          Key: newPath,
-          Body: data,
-          ACL: 'public-read',
-          ContentType: file.type,
-        };
-        s3.putObject(params, (error, result) => {
-          logger.info('Success Uploaded Image Result on S3', result);
-          if (error) {
-            logger.error('Error Uploaded Image Result on S3', error);
-            return reject(error);
-          }
-          return resolve(newFilename);
-        });
+        return resolve(newFilename);
       });
     } catch (err) {
       logger.error('Error While Uploading Image on S3', err);

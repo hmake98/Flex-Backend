@@ -21,7 +21,7 @@ auth.validateUser = (req, res, next) => {
       if (err) {
         logger.error(err);
         return res.status(ERROR401.CODE).json({
-          error: req.t('INVALID_TOKEN'),
+          error: 'INVALID_TOKEN',
         });
       }
       if (decoded) {
@@ -30,7 +30,7 @@ auth.validateUser = (req, res, next) => {
     });
   } else {
     return res.status(ERROR400.CODE).json({
-      error: req.t('INVALID_TOKEN'),
+      error: 'INVALID_TOKEN',
     });
   }
 };
@@ -39,13 +39,13 @@ auth.isAuthenticatedUser = (req, res, next) => {
   const token = req.headers['x-access-token'] || req.headers.authorization;
   if (!token) {
     return res.status(ERROR401.CODE).json({
-      error: req.t('PERMISSION_ERROR'),
+      error: 'PERMISSION_ERROR',
     });
   }
   const userData = jwt.verify(token, process.env.PRIVATE_KEY);
   if (!userData.userId) {
     return res.status(ERROR401.CODE).json({
-      error: req.t('PERMISSION_ERROR'),
+      error: 'PERMISSION_ERROR',
     });
   }
   userModel.findOne({ _id: mongoose.Types.ObjectId(userData.userId) })
@@ -55,12 +55,12 @@ auth.isAuthenticatedUser = (req, res, next) => {
         next();
       } else {
         return res.status(ERROR401.CODE).json({
-          error: req.t('ERR_USER_NOT_FOUND'),
+          error: 'ERR_USER_NOT_FOUND',
         });
       }
     }).catch(() => {
       return res.status(ERROR401.CODE).json({
-        error: req.t('PERMISSION_ERROR'),
+        error: 'PERMISSION_ERROR',
       });
     });
 };

@@ -8,11 +8,15 @@ userService.createUser = (data) => {
 };
 
 userService.updateUser = (id, data) => {
-  return UserModel.findOneAndUpdate({ _id: id }, { $set: data });
+  return UserModel.findOneAndUpdate({ _id: id }, { $set: data }, { new: true });
 };
 
 userService.getUserByUsername = (userName) => {
   return UserModel.findOne({ userName });
+}
+
+userService.getUserByUserId = (id) => {
+  return UserModel.findById(id);
 }
 
 module.exports = userService;

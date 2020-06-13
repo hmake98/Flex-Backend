@@ -15,18 +15,14 @@ global.models = require('../models');
 
 const app = express();
 
-app.set('port', process.env.PORT);
+app.use(bodyParser.urlencoded({ extended: false })) 
+app.use(bodyParser.json());
+app.use(express.static('public'));
 app.use(morgan('combined'));
-app.use(bodyParser.json({
-  limit: '10gb'
-}));
-app.use(bodyParser.urlencoded({
-  limit: '10gb',
-  extended: true
-}));
 app.use(cors());
-app.use(`${process.env.ENV_URL}`, require('../routes'));
 app.use(cookieParser());
+app.set('port', process.env.PORT);
+app.use(`${process.env.ENV_URL}`, require('../routes'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
