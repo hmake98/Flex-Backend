@@ -1,22 +1,42 @@
-const UserModel = require('../../../models/User');
+const NormalUserModel = require('../../../models/NormalUser');
+const OrgUserModel = require('../../../models/OrgUser');
+const normalusers = require('../../../models/NormalUser');
+const { orgLogin } = require('./userController');
 
 const userService = {};
 
-userService.createUser = (data) => {
-  const user = new UserModel(data);
+userService.createNormalUser = (data) => {
+  const user = new NormalUserModel(data);
   return user.save();
 };
 
-userService.updateUser = (id, data) => {
-  return UserModel.findOneAndUpdate({ _id: id }, { $set: data }, { new: true });
+userService.createOrgUser = (data) => {
+  const user = new OrgUserModel(data);
+  return user.save();
 };
 
-userService.getUserByUsername = (userName) => {
-  return UserModel.findOne({ userName });
+userService.updateNormalUser = (id, data) => {
+  return NormalUserModel.findOneAndUpdate({ _id: id }, { $set: data }, { new: true });
+};
+
+userService.updateOrgUser = (id, data) => {
+  return OrgUserModel.findOneAndUpdate({ _id: id }, { $set: data }, { new: true });
+};
+
+userService.getNormalUserByUsername = (userName) => {
+  return NormalUserModel.findOne({ userName });
 }
 
-userService.getUserByUserId = (id) => {
-  return UserModel.findById(id);
+userService.getOrgUserByEmail = (email) => {
+  return OrgUserModel.findOne({ email });
+}
+
+userService.getNormalUserByUserId = (id) => {
+  return NormalUserModel.findById(id);
+}
+
+userService.getOrgUserByUserId = (id) => {
+  return OrgUserModel.findById(id);
 }
 
 module.exports = userService;

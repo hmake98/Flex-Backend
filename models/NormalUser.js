@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 // Schema
-const userSchema = new Schema(
+const normalUserSchema = new Schema(
   {
     userName: {
       type: String,
@@ -26,6 +26,12 @@ const userSchema = new Schema(
     deleteDate: {
       type: Date,
     },
+    birthdate: {
+      type: String,
+    },
+    phone: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
@@ -33,6 +39,6 @@ const userSchema = new Schema(
   },
 );
 
-const users = mongoose.model('users', userSchema);
+const normalusers = mongoose.model('normal_users', normalUserSchema);
 
-module.exports = users;
+module.exports = normalusers;

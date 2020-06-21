@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const request = require('request');
 
-const userModel = require('../models/User');
+const NormalUserModel = require('../models/NormalUser');
+const OrgUserModel = require('../models/OrgUser');
 
 const logger = require('../helpers/logger');
 const {
@@ -35,7 +36,7 @@ auth.validateUser = (req, res, next) => {
   }
 };
 
-auth.isAuthenticatedUser = (req, res, next) => {
+auth.isAuthenticatedNormalUser = (req, res, next) => {
   const token = req.headers['x-access-token'] || req.headers.authorization;
   if (!token) {
     return res.status(ERROR401.CODE).json({
@@ -48,7 +49,37 @@ auth.isAuthenticatedUser = (req, res, next) => {
       error: 'PERMISSION_ERROR',
     });
   }
-  userModel.findOne({ _id: mongoose.Types.ObjectId(userData.userId) })
+  NormalUserModel.findOne({ _id: mongoose.Types.ObjectId(userData.userId) })
+    .then((user) => {
+      req.authUser = user;
+      if (!_.isEmpty(user)) {
+        next();
+      } else {
+        return res.status(ERROR401.CODE).json({
+          error: 'ERR_USER_NOT_FOUND',
+        });
+      }
+    }).catch(() => {
+      return res.status(ERROR401.CODE).json({
+        error: 'PERMISSION_ERROR',
+      });
+    });
+};
+
+auth.isAuthenticatedOrgUser = (req, res, next) => {
+  const token = req.headers['x-access-token'] || req.headers.authorization;
+  if (!token) {
+    return res.status(ERROR401.CODE).json({
+      error: 'PERMISSION_ERROR',
+    });
+  }
+  const userData = jwt.verify(token, process.env.PRIVATE_KEY);
+  if (!userData.userId) {
+    return res.status(ERROR401.CODE).json({
+      error: 'PERMISSION_ERROR',
+    });
+  }
+  OrgUserModel.findOne({ _id: mongoose.Types.ObjectId(userData.userId) })
     .then((user) => {
       req.authUser = user;
       if (!_.isEmpty(user)) {

@@ -9,36 +9,59 @@ const auth = require('../../../helpers/auth');
 const multipartMiddleware = multipart();
 const userRouter = express.Router();
 
-const login = [
-  userMiddleware.loginUserValidator(),
+const normalLogin = [
+  userMiddleware.normalLoginUserValidator(),
   validationHandler,
-  userCtr.login,
+  userCtr.normalLogin,
 ];
-userRouter.post('/login', login);
+userRouter.post('/login', normalLogin);
 
-// Complete Profile OR Update Profile API
-const signUp = [
-  userMiddleware.signUpUserValidator(),
-  userMiddleware.isUserExists,
+const orgLogin = [
+  userMiddleware.orgLoginUserValidator(),
   validationHandler,
-  userCtr.signUp,
+  userCtr.orgLogin,
 ];
-userRouter.post('/signup', signUp);
+userRouter.post('/org-login', orgLogin);
 
-const completeProfile = [
-  userMiddleware.completeProfileValidator(),
+const normalSignUp = [
+  userMiddleware.normalSignUpUserValidator(),
+  userMiddleware.isNormalUserExists,
+  validationHandler,
+  userCtr.normalSignUp,
+];
+userRouter.post('/signup', normalSignUp);
+
+const orgSignUp = [
+  userMiddleware.orgSignUpUserValidator(),
+  userMiddleware.isOrgUserExists,
+  validationHandler,
+  userCtr.orgSignUp,
+];
+userRouter.post('/org-signup', orgSignUp);
+
+const completeNormalProfile = [
+  userMiddleware.completeNormalProfileValidator(),
   multipartMiddleware,
   auth.validateUser,
-  auth.isAuthenticatedUser,
+  auth.isAuthenticatedNormalUser,
   validationHandler,
-  userCtr.compelteProfile,
+  userCtr.compelteNormalProfile,
 ];
-userRouter.post('/complete-profile', completeProfile);
+userRouter.post('/complete-profile', completeNormalProfile);
+
+const completeOrgProfile = [
+  userMiddleware.completeOrgProfileValidator(),
+  multipartMiddleware,
+  auth.validateUser,
+  auth.isAuthenticatedOrgUser,
+  validationHandler,
+  userCtr.compelteOrgProfile,
+];
+userRouter.post('/complete-org-profile', completeOrgProfile);
 
 const updatePassword = [
   userMiddleware.updatePasswordValidator(),
   auth.validateUser,
-  auth.isAuthenticatedUser,
   validationHandler,
   userCtr.updatePassword,
 ];
