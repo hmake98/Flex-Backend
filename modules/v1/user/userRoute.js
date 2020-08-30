@@ -9,55 +9,30 @@ const auth = require('../../../helpers/auth');
 const multipartMiddleware = multipart();
 const userRouter = express.Router();
 
-const normalLogin = [
-  userMiddleware.normalLoginUserValidator(),
+const login = [
+  userMiddleware.LoginUserValidator(),
   validationHandler,
-  userCtr.normalLogin,
+  userCtr.Login,
 ];
-userRouter.post('/login', normalLogin);
+userRouter.post('/login', login);
 
-const orgLogin = [
-  userMiddleware.orgLoginUserValidator(),
+const SignUp = [
+  userMiddleware.SignUpUserValidator(),
+  userMiddleware.isUserExists,
   validationHandler,
-  userCtr.orgLogin,
+  userCtr.SignUp,
 ];
-userRouter.post('/org-login', orgLogin);
+userRouter.post('/signup', SignUp);
 
-const normalSignUp = [
-  userMiddleware.normalSignUpUserValidator(),
-  userMiddleware.isNormalUserExists,
-  validationHandler,
-  userCtr.normalSignUp,
-];
-userRouter.post('/signup', normalSignUp);
-
-const orgSignUp = [
-  userMiddleware.orgSignUpUserValidator(),
-  userMiddleware.isOrgUserExists,
-  validationHandler,
-  userCtr.orgSignUp,
-];
-userRouter.post('/org-signup', orgSignUp);
-
-const completeNormalProfile = [
-  userMiddleware.completeNormalProfileValidator(),
+const completeProfile = [
+  userMiddleware.completeProfileValidator(),
   multipartMiddleware,
   auth.validateUser,
-  auth.isAuthenticatedNormalUser,
+  auth.isAuthenticatedUser,
   validationHandler,
-  userCtr.compelteNormalProfile,
+  userCtr.compelteProfile,
 ];
-userRouter.post('/complete-profile', completeNormalProfile);
-
-const completeOrgProfile = [
-  userMiddleware.completeOrgProfileValidator(),
-  multipartMiddleware,
-  auth.validateUser,
-  auth.isAuthenticatedOrgUser,
-  validationHandler,
-  userCtr.compelteOrgProfile,
-];
-userRouter.post('/complete-org-profile', completeOrgProfile);
+userRouter.post('/complete-profile', completeProfile);
 
 const updatePassword = [
   userMiddleware.updatePasswordValidator(),
