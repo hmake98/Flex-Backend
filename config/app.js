@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var cors = require('cors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
+const app = express();
 
 // HTTP logger
 var morgan = require('morgan');
@@ -12,11 +13,9 @@ const bodyParser = require('body-parser');
 global._ = require('lodash');
 global.config = require('../config/config');
 global.models = require('../models');
-
-const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: false })) 
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(morgan('combined'));
@@ -36,7 +35,7 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  res.json({ Title: `Welcome to ${process.env.NAME}` }); 
+  res.json({ Title: `Welcome to ${process.env.NAME}` });
 });
 
 module.exports = app;

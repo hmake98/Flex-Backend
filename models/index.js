@@ -24,10 +24,10 @@ mongoose.connect(uri, {
     useCreateIndex: true,
     useUnifiedTopology: true
 }).then(() => {
-    logger.info(`${process.env.DATABASE} Database server connected....`);
+    logger.info(`${process.env.DATABASE} Database server connected`);
 }).catch((error) => {
     logger.error(error);
-    logger.error('Could not connect Database server....');
+    logger.error('Could not connect Database server');
 });
 
 module.exports = db;

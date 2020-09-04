@@ -1,14 +1,13 @@
 const {
     check,
 } = require('express-validator');
-const jwt = require('jsonwebtoken');
-
 const userService = require('./userService');
 const logger = require('../../../helpers/logger');
 const {
     STANDARD,
     ERROR500,
 } = require('../../../constants/comman');
+const messages = require('../../../constants/messages');
 
 const middleware = {};
 
@@ -46,7 +45,6 @@ middleware.updatePasswordValidator = () => {
     ];
 };
 
-// Check if is user exists or not if exists then return (Find By facebookId)
 middleware.isUserExists = async (req, res, next) => {
     try {
         const {
@@ -57,12 +55,13 @@ middleware.isUserExists = async (req, res, next) => {
             return next();
         }
         return res.status(STANDARD.SUCCESS).json({
-            message: 'User already exist!'
+            message: messages.userExits
         })
     } catch (err) {
         logger.error('Error From isUserExistsOrNot() in userMiddleware', err);
         return res.status(ERROR500.CODE).json({
-            error: 'TRY_AGAIN',
+            message: 'USER_EXIST',
+            error: err
         });
     }
 };

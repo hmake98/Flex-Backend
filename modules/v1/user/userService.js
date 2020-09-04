@@ -2,7 +2,7 @@ const User = require('../../../models/User');
 
 const userService = {};
 
-userService.createNormalUser = (data) => {
+userService.createUser = (data) => {
   const user = new User(data);
   return user.save();
 };
