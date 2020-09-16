@@ -6,7 +6,7 @@
     "start": "node server"
   },
   "dependencies": {
-    "aws-sdk": "^2.751.0",
+    "aws-sdk": "^2.747.0",
     "bcrypt": "^5.0.0",
     "connect-multiparty": "^2.2.0",
     "cookie-parser": "^1.4.5",
