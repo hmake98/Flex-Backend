@@ -9,7 +9,6 @@ const {
 } = require('../../../constants/comman');
 const auth = require('../../../helpers/auth');
 const messages = require('../../../constants/messages');
-
 const userCtr = {};
 
 userCtr.Login = async (req, res) => {

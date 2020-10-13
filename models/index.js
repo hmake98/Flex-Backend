@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const logger = require('../helpers/logger');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 mongoose.set('debug', false);
 mongoose.Promise = require('bluebird');
@@ -27,7 +29,7 @@ mongoose.connect(uri, {
     logger.info(`${process.env.DATABASE} Database server connected`);
 }).catch((error) => {
     logger.error(error);
-    logger.error('Could not connect Database server');
+    logger.error('Could not connect Monogo Database server');
 });
 
-module.exports = db;
+module.exports = { db, prisma };

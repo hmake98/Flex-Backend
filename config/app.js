@@ -3,8 +3,6 @@ var cors = require('cors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 const app = express();
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
 
 // HTTP logger
 var morgan = require('morgan');
@@ -25,12 +23,6 @@ app.use(cors());
 app.use(cookieParser());
 app.use(`${process.env.ENV_URL}`, require('../routes'));
 app.set('port', port);
-
-prisma.user.findMany().then(res => {
-  console.log(res);
-}).catch(err => {
-  console.log(err);
-})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
