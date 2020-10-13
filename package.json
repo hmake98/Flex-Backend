@@ -6,6 +6,7 @@
     "start": "node server"
   },
   "dependencies": {
+    "@prisma/client": "^2.9.0",
     "aws-sdk": "^2.747.0",
     "bcrypt": "^5.0.0",
     "connect-multiparty": "^2.2.0",
@@ -26,6 +27,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@prisma/cli": "^2.9.0",
     "nodemon": "^2.0.4"
   }
 }
