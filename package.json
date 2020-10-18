@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server"
+    "start": "node server",
+    "postinstall": "npx prisma generate",
+    "db:save": "npx prisma migrate save --experimental",
+    "db:migrate": "npx prisma migrate up --experimental"
   },
   "dependencies": {
     "@prisma/client": "^2.9.0",

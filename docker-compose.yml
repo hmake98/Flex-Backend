@@ -1,18 +1,18 @@
-version: '3.1'
+version: "3.1"
 
 services:
   db:
-    container_name: flex-mongo
+    container_name: flex-db
     restart: always
-    image: 'mongo:latest'
+    image: "mongo:latest"
     ports:
-      - '27018:27017'
+      - "27018:27017"
   server:
     depends_on:
       - db
     container_name: flex-backend
     ports:
-      - '5000:3000'
+      - "5000:3000"
     build:
       dockerfile: Dockerfile
       context: .
