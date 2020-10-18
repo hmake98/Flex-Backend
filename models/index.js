@@ -12,7 +12,9 @@ if (process.env.DBUSER && process.env.DBPASSWORD) {
     uri += `${process.env.DBUSER}:${process.env.DBPASSWORD}`;
 }
 
-uri += `${process.env.DATABASE_URL}:${process.env.DATABASE_PORT}/${process.env.DATABASE}`;
+uri += `${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE}`;
+
+logger.info(uri);
 
 const db = {
     Schema: mongoose.Schema,
@@ -31,5 +33,11 @@ mongoose.connect(uri, {
     logger.error(error);
     logger.error('Could not connect Monogo Database server');
 });
+
+prisma.$connect().then(() => {
+    logger.info('Prisma connected');
+}).catch(err => {
+    logger.error(err);
+})
 
 module.exports = { db, prisma };

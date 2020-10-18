@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const UserModel = require('../models/User');
+const { prisma } = require('../models')
 
 const logger = require('../helpers/logger');
 const {
@@ -63,6 +64,40 @@ auth.isAuthenticatedUser = (req, res, next) => {
       });
     });
 };
+
+auth.isAuthenticatedUserPrisma = (req, res, next) => {
+  const token = req.headers['x-access-token'] || req.headers.authorization;
+  if (!token) {
+    return res.status(ERROR401.CODE).json({
+      error: 'PERMISSION_ERROR',
+    });
+  }
+  const userData = jwt.verify(token, process.env.PRIVATE_KEY);
+  if (!userData.userId) {
+    return res.status(ERROR401.CODE).json({
+      error: 'PERMISSION_ERROR',
+    });
+  }
+  prisma.user.findOne({
+    where: {
+      id: userData.userId
+    }
+  }).then((user) => {
+    req.authUser = user;
+    if (!_.isEmpty(user)) {
+      next();
+    } else {
+      return res.status(ERROR401.CODE).json({
+        error: 'ERR_USER_NOT_FOUND',
+      });
+    }
+  }).catch(() => {
+    return res.status(ERROR401.CODE).json({
+      error: 'PERMISSION_ERROR',
+    });
+  })
+};
+
 
 auth.generateToken = (id) => {
   if (id) {
