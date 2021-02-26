@@ -9,7 +9,7 @@ const logger = createLogger({
         }),
         format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
     ),
-    // transports: [new transports.File({ filename: 'stdout.log' })]
+    transports: [new transports.File({ filename: 'stdout.log' })]
 });
 
 export default logger;

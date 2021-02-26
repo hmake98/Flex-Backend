@@ -9,7 +9,7 @@ export const initDatabase = () => {
         useCreateIndex: true,
         useUnifiedTopology: true
     }).then(() => {
-        logger.info('🚀 Database connected!')
+        logger.info('Database connected!')
     }).catch((error) => {
         logger.info('Database connection error :', error)
     })

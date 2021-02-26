@@ -27,6 +27,7 @@ export const USER = {
     NOT_FOUND: 'User does not exists',
     FOUND: 'User found',
     DELETED: 'User deleted',
+    PASSWORD_INCORRECT: 'Invalid Password'
 }
 
 export const PROFILE = {

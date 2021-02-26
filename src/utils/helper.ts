@@ -5,8 +5,11 @@ import { createReadStream } from 'fs';
 import { IS3FileUpload } from './interfaces';
 import { aws_keys } from '../configs/keys';
 import { S3 } from 'aws-sdk';
-import * as path from 'path'
 import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import { genSalt, hash, compare } from 'bcrypt'
+import * as path from 'path'
+import { saltRound } from './../configs/keys';
+
 
 const s3 = new S3({
     accessKeyId: aws_keys.AWS_ACCESS_KEY,
@@ -28,6 +31,27 @@ export const generate_tokens = (user: object): Promise<object> => {
         } catch (error) {
             reject(error)
         }
+    })
+}
+
+export const generatePassword = (password: string) => {
+    return new Promise((resolve, reject) => {
+        genSalt(saltRound, function (err, salt) {
+            if (err) reject(err);
+            hash(password, salt, function (err, hash) {
+                if (err) reject(err)
+                resolve(hash)
+            });
+        });
+    })
+}
+
+export const checkPassword = (encoded: string, input: string) => {
+    return new Promise((resolve, reject) => {
+        compare(input, encoded, function (err, decoded) {
+            if (err) reject(err);
+            resolve(decoded);
+        })
     })
 }
 

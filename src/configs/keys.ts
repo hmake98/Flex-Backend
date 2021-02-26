@@ -29,3 +29,4 @@ export const db = DB;
 export const token = TOKEN;
 export const aws_keys = AWS;
 export const PORT = process.env.PORT || 7000;
+export const saltRound = Number(process.env.GEN_SALT_ROUND) || 10;
