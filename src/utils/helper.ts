@@ -75,16 +75,16 @@ export const uploadToS3Bucket = async (data: IS3FileUpload): Promise<any> => {
                 ContentType: file.type,
             };
             s3.putObject(params, (error, result) => {
-                logger.info('Success Uploaded Image Result on S3', result);
                 if (error) {
                     logger.error('Error Uploaded Image Result on S3', error);
-                    return reject(error);
+                    reject(error);
                 }
-                return resolve(newFilename);
+                logger.info('Success Uploaded Image Result on S3', result);
+                resolve(result);
             });
         } catch (error) {
             logger.error('Error While Uploading Image on S3', error);
-            return reject(error);
+            reject(error);
         }
     })
 }

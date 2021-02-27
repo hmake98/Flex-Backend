@@ -1,7 +1,6 @@
 import { Response } from 'express';
 
 export class Responses {
-
     constructor() { }
 
     public success = (res: Response, data: object = {}, message: string = "", statusCode: number = 200, status: boolean = true) => {

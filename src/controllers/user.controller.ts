@@ -1,9 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import { User } from '../models/User'
-import logger from '../services/logger.service'
 import { Responses } from '../utils/Response'
 import { USER } from './../utils/messages';
-import { checkPassword, generatePassword, generate_tokens } from './../utils/helper';
+import {
+	checkPassword,
+	generatePassword,
+	generate_tokens,
+	uploadToS3Bucket
+} from './../utils/helper';
+import logger from '../services/logger.service'
 
 export class UserController extends Responses {
 	public normallogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -37,8 +42,6 @@ export class UserController extends Responses {
 			const {
 				email,
 				password,
-				firstName,
-				lastName,
 				userName,
 				dateOfBirth,
 			} = req.body;
@@ -54,8 +57,6 @@ export class UserController extends Responses {
 			const createUser = new User({
 				email,
 				password: hashPass,
-				firstName,
-				lastName,
 				userName,
 				dateOfBirth,
 			})
@@ -77,8 +78,6 @@ export class UserController extends Responses {
 	public socialSignup = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const {
-				firstName,
-				lastName,
 				provider,
 				socialId,
 				userName
@@ -94,8 +93,6 @@ export class UserController extends Responses {
 			}
 
 			const createUser = new User({
-				firstName,
-				lastName,
 				provider,
 				socialId,
 				userName
@@ -122,38 +119,48 @@ export class UserController extends Responses {
 
 			const check = await User.findOne({ userName });
 
-			if (check) {
-				return this.failed(res, {}, USER.FOUND, 400)
+			if (!check) {
+				return this.failed(res, {}, USER.FOUND, 200, true);
 			}
 
-			this.success(res, {});
+			this.success(res, {}, USER.NOT_FOUND, 200, true);
 		} catch (error) {
 			console.log(error)
 			logger.error('[checkUserName]', error)
 		}
 	}
 
-	public socialSignin = (req: Request, res: Response, next: NextFunction) => {
+	public updateUser = async (req: Request, res: Response, next: NextFunction) => {
 		try {
+			const {
+				email,
+				password,
+				userName,
+				dateOfBirth,
+				firstName,
+				lastName,
+			} = req.body;
 
-		} catch (error) {
-			console.log(error)
-			logger.error('[socialSignin]', error)
-		}
-	}
+			const { profilePic } = req.files
 
-	public forgotPassword = (req: Request, res: Response, next: NextFunction) => {
-		try {
+			const fileUpload = await uploadToS3Bucket({
+				bucketPath: 'user-profile-pics', file: profilePic
+			})
 
-		} catch (error) {
-			console.log(error)
-			logger.error('[forgotPassword]', error)
-		}
-	}
+			const updatedUser = await User.findByIdAndUpdate(
+				req.user._id,
+				{
+					email,
+					password,
+					userName,
+					dateOfBirth,
+					firstName,
+					lastName,
+					profilePic: fileUpload
+				}
+			)
 
-	public updateUser = (req: Request, res: Response, next: NextFunction) => {
-		try {
-
+			this.success(res, { user: updatedUser });
 		} catch (error) {
 			console.log(error)
 			logger.error('[updateUser]', error)
@@ -161,6 +168,3 @@ export class UserController extends Responses {
 	}
 }
 
-
-// return this.failed(res, {}, USER.ALREADY_REGISTERED, 200)
-// this.success(res, { user: updatedUser, auth: tokens });

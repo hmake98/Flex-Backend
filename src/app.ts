@@ -3,15 +3,18 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import { UserRoutes } from './routes/user.route';
+import { PostRoutes } from './routes/post.route';
 
 class App {
     public app: Application;
     public user: UserRoutes = new UserRoutes();
+    public post: PostRoutes = new PostRoutes();
 
     constructor() {
         this.app = express();
         this.initilizeMiddlewares();
         this.user.routes(this.app);
+        this.post.routes(this.app);
         this.initilizeErrorHandler();
     }
 
@@ -49,9 +52,11 @@ class App {
 declare global {
     namespace Express {
         export interface Request {
+            files: any;
             user: {
-                id: any,
-                email: any
+                _id: any,
+                email: string,
+                userName: string
             };
         }
     }

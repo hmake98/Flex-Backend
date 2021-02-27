@@ -11,12 +11,14 @@ export interface IUser extends Document {
     isActive: boolean;
     socialId: string;
     provider: string;
+    profilePic: string;
     posts: object;
 }
 
 const UserSchema: Schema = new Schema({
     email: { type: String, required: true },
     userName: { type: String, required: true, unique: true },
+    profilePic: { type: String, required: false },
     password: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
