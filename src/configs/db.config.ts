@@ -1,9 +1,7 @@
-import { connect, set } from 'mongoose'
-import logger from '../services/logger.service';
+import { connect } from 'mongoose'
 import { db } from './keys';
 
 export const initDatabase = () => {
-    set('debug', false);
     connect(db.DB_URL, {
         useNewUrlParser: true,
         useCreateIndex: true,

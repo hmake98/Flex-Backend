@@ -1,16 +1,29 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
     "lib": [
-      "es6"
+      "es2020"
     ],
-    "allowJs": true,
-    "outDir": "build",
-    "rootDir": "src",
-    "strict": true,
-    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es6",
     "esModuleInterop": true,
-    "resolveJsonModule": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "build",
+    "baseUrl": ".",
+    "paths": {
+      "config/*": [
+        "config/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
