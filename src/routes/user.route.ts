@@ -5,25 +5,26 @@ import { userValidation } from '../validators'
 
 export class UserRoutes extends Middleware {
     public userController: UserController = new UserController();
-    constructor() { super() }
+    public preRoutes: string;
+    constructor() {
+        super()
+        this.preRoutes = '/api/user'
+    }
 
     public routes = (app: Application) => {
-        app.route('/user/login')
+        app.route(`${this.preRoutes}/login`)
             .post(userValidation.normalLogin, this.valid, this.userController.normallogin);
 
-        app.route('/user/signup')
+        app.route(`${this.preRoutes}/signup`)
             .post(userValidation.createUser, this.valid, this.userController.normalsignup);
 
-        app.route('/user/social-signup')
+        app.route(`${this.preRoutes}/social-signup`)
             .post(userValidation.social, this.valid, this.userController.socialSignup);
 
-        app.route('/user/social-signin')
-            .post(userValidation.social, this.valid, this.userController.socialSignin);
+        app.route(`${this.preRoutes}/check-username`)
+            .get(userValidation.checkUserName, this.valid, this.userController.checkUserName);
 
-        app.route('/user/forgot-password')
-            .post(userValidation.createUser, this.valid, this.userController.forgotPassword);
-
-        app.route('/user/update-profile')
-            .post(userValidation.createUser, this.valid, this.userController.updateUser);
+        app.route(`${this.preRoutes}/update-profile`)
+            .post(userValidation.updateUser, this.valid, this.Auth, this.userController.updateUser);
     }
 }

@@ -1,16 +1,14 @@
-import { connect, set } from 'mongoose'
-import logger from '../services/logger.service';
+import { connect } from 'mongoose'
 import { db } from './keys';
 
 export const initDatabase = () => {
-    set('debug', false);
     connect(db.DB_URL, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true
     }).then(() => {
-        logger.info('Database connected!')
+        console.log(`🚀 ${db.DB_URL} Database connected!`)
     }).catch((error) => {
-        logger.info('Database connection error :', error)
+        console.log('Database connection error :', error)
     })
 }
