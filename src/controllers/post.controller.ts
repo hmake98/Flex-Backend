@@ -5,25 +5,25 @@ import { POST } from 'src/utils/messages';
 import { Responses } from '../utils/Response';
 
 export class PostController extends Responses {
-
-  public getPost = async (req: Request, res: Response) => {
-    try {
-      const {
-        id
-      } = req.query;
-      const post = Post.findById(id)
-      this.success(res, { post });
-    } catch (err) {
-      logger.error('[createPost]: err');
-    }
-  }
-
   public getPosts = async (req: Request, res: Response) => {
     try {
       const {
-        pagination
-      } = req.body;
+        skip,
+        limit,
+        id,
+      } = req.query;
 
+      const posts = await Post.aggregate([
+        {
+          $match: {
+            id
+          }
+        },
+        { $limit: +skip + +limit },
+        { $skip: +skip },
+      ])
+
+      this.success(res, { posts });
     } catch (err) {
       logger.error('[createPost]: err');
     }

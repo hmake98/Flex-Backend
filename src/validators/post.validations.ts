@@ -10,31 +10,7 @@ const createPost = [
 ]
 
 const editPost = [
-    body('id').trim().escape().isAlpha(),
-    body('title').trim().escape().isAlpha().optional(),
-    body('body').trim().escape().isAlpha().optional(),
-    body('images').trim().escape().isArray().optional(),
-    body('isPublic').trim().escape().isBoolean().optional(),
-]
-
-const deletePost = [
-    body('id').trim().escape().isAlpha(),
-    body('title').trim().escape().isAlpha().optional(),
-    body('body').trim().escape().isAlpha().optional(),
-    body('images').trim().escape().isArray().optional(),
-    body('isPublic').trim().escape().isBoolean().optional(),
-]
-
-const getPost = [
-    body('id').trim().escape().isAlpha(),
-    body('title').trim().escape().isAlpha().optional(),
-    body('body').trim().escape().isAlpha().optional(),
-    body('images').trim().escape().isArray().optional(),
-    body('isPublic').trim().escape().isBoolean().optional(),
-]
-
-const getPosts = [
-    body('id').trim().escape().isAlpha(),
+    body('id').trim().escape().isAlphanumeric(),
     body('title').trim().escape().isAlpha().optional(),
     body('body').trim().escape().isAlpha().optional(),
     body('images').trim().escape().isArray().optional(),
@@ -44,7 +20,4 @@ const getPosts = [
 export default {
     createPost,
     editPost,
-    deletePost,
-    getPosts,
-    getPost
 }

@@ -13,14 +13,12 @@ export class PostRoutes extends Middleware {
 
     public routes = (app: Application) => {
         app.route(`${this.preRoutes}/`)
-            .get(postValidation.getPost, this.valid, this.postController.getPost);
-        app.route(`${this.preRoutes}/`)
-            .post(postValidation.getPosts, this.valid, this.postController.getPosts);
+            .get(this.valid, this.postController.getPosts);
         app.route(`${this.preRoutes}/create`)
             .post(postValidation.createPost, this.valid, this.postController.createPost);
         app.route(`${this.preRoutes}/edit`)
             .put(postValidation.editPost, this.valid, this.postController.editPost);
         app.route(`${this.preRoutes}/delete`)
-            .delete(postValidation.deletePost, this.valid, this.postController.deletePost);
+            .delete(this.valid, this.postController.deletePost);
     }
 }
