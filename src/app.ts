@@ -7,8 +7,10 @@ import { PostRoutes } from './routes/post.route';
 
 class App {
     public app: Application;
-    public user: UserRoutes = new UserRoutes();
-    public post: PostRoutes = new PostRoutes();
+    public preRoutes: string = '/api';
+    
+    public user: UserRoutes = new UserRoutes(`${this.preRoutes}/user`);
+    public post: PostRoutes = new PostRoutes(`${this.preRoutes}/post`);
 
     constructor() {
         this.app = express();

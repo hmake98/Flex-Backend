@@ -2,14 +2,13 @@ import { sign } from 'jsonwebtoken';
 import { token, } from '../configs/keys';
 import logger from '../services/logger.service';
 import { createReadStream } from 'fs';
-import { IS3FileUpload } from './interfaces';
+import { IS3FileUpload } from './Interfaces';
 import { aws_keys } from '../configs/keys';
 import { S3 } from 'aws-sdk';
 import { PutObjectRequest } from 'aws-sdk/clients/s3';
 import { genSalt, hash, compare } from 'bcrypt'
 import * as path from 'path'
 import { saltRound } from './../configs/keys';
-
 
 const s3 = new S3({
     accessKeyId: aws_keys.AWS_ACCESS_KEY,

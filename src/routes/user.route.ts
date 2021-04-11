@@ -6,9 +6,9 @@ import { userValidation } from '../validators'
 export class UserRoutes extends Middleware {
     public userController: UserController = new UserController();
     public preRoutes: string;
-    constructor() {
+    constructor(preRoutes) {
         super()
-        this.preRoutes = '/api/user'
+        this.preRoutes = preRoutes
     }
 
     public routes = (app: Application) => {

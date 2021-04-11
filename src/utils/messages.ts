@@ -30,6 +30,10 @@ export const USER = {
     PASSWORD_INCORRECT: 'Invalid Password'
 }
 
+export const POST = {
+    DELETED: 'Post successfully deleted'
+}
+
 export const PROFILE = {
     EXCLUDE: ["createdAt", "updatedAt", "user_id", "id"],
     NOT_FOUND: 'User profile not found',

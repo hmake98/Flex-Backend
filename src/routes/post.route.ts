@@ -4,10 +4,23 @@ import { Middleware } from '../middlewares';
 import { postValidation } from '../validators'
 
 export class PostRoutes extends Middleware {
-    public userController: PostController = new PostController();
-    constructor() { super() }
+    public postController: PostController = new PostController();
+    public preRoutes: string;
+    constructor(preRoutes) {
+        super()
+        this.preRoutes = preRoutes
+    }
 
     public routes = (app: Application) => {
-
+        app.route(`${this.preRoutes}/`)
+            .get(postValidation.getPost, this.valid, this.postController.getPost);
+        app.route(`${this.preRoutes}/`)
+            .post(postValidation.getPosts, this.valid, this.postController.getPosts);
+        app.route(`${this.preRoutes}/create`)
+            .post(postValidation.createPost, this.valid, this.postController.createPost);
+        app.route(`${this.preRoutes}/edit`)
+            .put(postValidation.editPost, this.valid, this.postController.editPost);
+        app.route(`${this.preRoutes}/delete`)
+            .delete(postValidation.deletePost, this.valid, this.postController.deletePost);
     }
 }
