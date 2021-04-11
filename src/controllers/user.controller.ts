@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../models/User';
+import { User } from '../models';
 import { Responses } from '../utils/Response';
 import { USER } from '../utils/messages';
 import {

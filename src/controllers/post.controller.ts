@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { Post } from 'src/models/Post';
-import logger from 'src/services/logger.service';
-import { POST } from 'src/utils/messages';
+import { Post } from '../models';
+import logger from '../services/logger.service';
+import { POST } from '../utils/messages';
 import { Responses } from '../utils/Response';
 
 export class PostController extends Responses {
