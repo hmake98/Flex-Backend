@@ -1,23 +1,23 @@
-import { body } from 'express-validator';
-import { VALIDATION } from '../utils/messages';
+import { body } from 'express-validator'
+import { VALIDATION } from '../utils/messages'
 
 // alawys sanitizatize the input use trim and escape every for each input.
 const createPost = [
-    body('title').trim().escape().isAlpha().optional(),
-    body('body').trim().escape().isAlpha().optional(),
-    body('images').trim().escape().isArray().optional(),
-    body('isPublic').trim().escape().isBoolean().optional(),
+	body('title').trim().escape().isAlpha().optional(),
+	body('body').trim().escape().isAlpha().optional(),
+	body('images').trim().escape().isArray().optional(),
+	body('isPublic').trim().escape().isBoolean().optional(),
 ]
 
 const editPost = [
-    body('id').trim().escape().isAlphanumeric(),
-    body('title').trim().escape().isAlpha().optional(),
-    body('body').trim().escape().isAlpha().optional(),
-    body('images').trim().escape().isArray().optional(),
-    body('isPublic').trim().escape().isBoolean().optional(),
+	body('id').trim().escape().isAlphanumeric(),
+	body('title').trim().escape().isAlpha().optional(),
+	body('body').trim().escape().isAlpha().optional(),
+	body('images').trim().escape().isArray().optional(),
+	body('isPublic').trim().escape().isBoolean().optional(),
 ]
 
 export default {
-    createPost,
-    editPost,
+	createPost,
+	editPost,
 }

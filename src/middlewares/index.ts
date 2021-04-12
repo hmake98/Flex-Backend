@@ -6,7 +6,7 @@ import { VALIDATION, ERRORS, USER } from '../utils/messages'
 import { User } from '../models/User'
 
 export class Middleware {
-	constructor() { }
+	constructor() {}
 
 	public valid = (req: Request, res: Response, next: NextFunction) => {
 		try {
@@ -44,11 +44,7 @@ export class Middleware {
 		}
 	}
 
-	public RefreshAuth = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
+	public RefreshAuth = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			let authorization = req.headers['authorization']
 			if (!authorization) throw new Error(ERRORS.MISSING_HEADER)

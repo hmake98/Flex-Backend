@@ -1,5 +1,5 @@
 # Flex-backend
-Production-grade typescript based express boilerplate with Socket.IO connection and MongoDB
+Production-grade typescript based express boilerplate with Socket.IO connection and [MongoDB](https://www.mongodb.com/)
 
 ## How to use
 
@@ -11,7 +11,7 @@ Install Node dependencies:
 
 ### 2. Set up the database
 
-This uses [MongoDB](https://www.mongodb.com/) as Database.
+This uses MongoDB as Database.
 
 - to add your own database, change `DB_URL` in `.env` file
 
@@ -30,3 +30,4 @@ Build server with command:
 ```sh
 npm run build
 ```
+
