@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@types/mongoose": "^5.10.3",
-    "aws-sdk": "^2.852.0",
+    "aws-sdk": "^2.884.0",
     "bcrypt": "^5.0.1",
     "dayjs": "^1.9.1",
     "dotenv": "^8.2.0",
