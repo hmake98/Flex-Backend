@@ -7,6 +7,10 @@ import { User } from '../entity/User'
 import { getRepository } from 'typeorm';
 
 export class Middleware {
+<<<<<<< HEAD
+=======
+	constructor() {}
+>>>>>>> 2e097cc154e45f1158acd6fff60bc04d20a14210
 
 	public valid = (req: Request, res: Response, next: NextFunction) => {
 		try {
@@ -43,11 +47,7 @@ export class Middleware {
 		}
 	}
 
-	public RefreshAuth = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
+	public RefreshAuth = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			let authorization = req.headers['authorization']
 			if (!authorization) throw new Error(ERRORS.MISSING_HEADER)

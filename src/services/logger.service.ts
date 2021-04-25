@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import winston from 'winston';
 
@@ -46,5 +47,20 @@ const logger = winston.createLogger({
     format,
     transports,
 });
+=======
+import { createLogger, format, transports } from 'winston'
+const env = process.env.NODE_ENV || 'development'
 
-export default logger;
+const logger = createLogger({
+	level: env === 'development' ? 'debug' : 'info',
+	format: format.combine(
+		format.timestamp({
+			format: 'YYYY-MM-DD HH:mm:ss',
+		}),
+		format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+	),
+	transports: [new transports.File({ filename: 'stdout.log' })],
+})
+>>>>>>> 2e097cc154e45f1158acd6fff60bc04d20a14210
+
+export default logger

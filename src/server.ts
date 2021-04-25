@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'reflect-metadata';
 import { ConnectionOptions } from 'typeorm';
 import { createConnection } from 'typeorm';
@@ -40,3 +41,17 @@ const start = async () => {
 };
 
 start().catch(console.error);
+=======
+import app from './app'
+import { initDatabase } from './configs/db.config'
+import { PORT } from './configs/keys'
+
+app
+	.listen(PORT, () => {
+		console.log(`🚀 Server is up and running on port -> ${PORT}`)
+		initDatabase()
+	})
+	.on('error', (err) => {
+		console.log(err)
+	})
+>>>>>>> 2e097cc154e45f1158acd6fff60bc04d20a14210
