@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
 import { token } from '../configs/keys'
 import { VALIDATION, ERRORS, USER } from '../utils/messages'
-import { User } from '../models/User'
+import { User } from '../entity/User'
+import { getRepository } from 'typeorm';
 
 export class Middleware {
-	constructor() { }
 
 	public valid = (req: Request, res: Response, next: NextFunction) => {
 		try {
@@ -27,9 +27,8 @@ export class Middleware {
 			if (!authorization) throw new Error(ERRORS.MISSING_HEADER)
 			let accessToken = authorization.split(' ')[1]
 			if (!accessToken) throw new Error(ERRORS.UNAUTH_ACCESS)
-			let decode: any = verify(accessToken, token.ACCESS_TOKEN)
-			const foundUser: any = 'query'
-			await User.findOne({ where: { id: decode.id } })
+			let decode: any = verify(accessToken, token.ACCESS_TOKEN) 
+			const foundUser = await getRepository(User).findOne({ where: { id: decode.id } })
 			if (!foundUser) {
 				const error: any = new Error(USER.NOT_FOUND)
 				error.statusCode = 401
@@ -55,8 +54,7 @@ export class Middleware {
 			let accessToken = authorization.split(' ')[1]
 			if (!accessToken) throw new Error(ERRORS.UNAUTH_ACCESS)
 			let decode: any = verify(accessToken, token.REFRESH_TOKEN)
-			const foundUser: any = 'query'
-			await User.findOne({ where: { id: decode.id } })
+			const foundUser: any = await getRepository(User).findOne({ where: { id: decode.id } })
 			if (!foundUser) {
 				const error: any = new Error(USER.NOT_FOUND)
 				error.statusCode = 401

@@ -7,16 +7,16 @@ export class UserRoutes extends Middleware {
     public userController: UserController = new UserController();
     public preRoutes: string;
     constructor() {
-        super()
+        super();
         this.preRoutes = '/api/user'
     }
 
     public routes = (app: Application) => {
         app.route(`${this.preRoutes}/login`)
-            .post(userValidation.normalLogin, this.valid, this.userController.normallogin);
+            .post(userValidation.normalLogin, this.valid, this.userController.login);
 
         app.route(`${this.preRoutes}/signup`)
-            .post(userValidation.createUser, this.valid, this.userController.normalsignup);
+            .post(userValidation.createUser, this.valid, this.userController.signup);
 
         app.route(`${this.preRoutes}/social-signup`)
             .post(userValidation.social, this.valid, this.userController.socialSignup);

@@ -2,7 +2,7 @@ import { sign } from 'jsonwebtoken';
 import { token, } from '../configs/keys';
 import logger from '../services/logger.service';
 import { createReadStream } from 'fs';
-import { IS3FileUpload } from './interfaces';
+import { IS3FileUpload } from './Interface';
 import { aws_keys } from '../configs/keys';
 import { S3 } from 'aws-sdk';
 import { PutObjectRequest } from 'aws-sdk/clients/s3';
@@ -34,7 +34,7 @@ export const generate_tokens = (user: object): Promise<object> => {
     })
 }
 
-export const generatePassword = (password: string) => {
+export const generatePassword = (password: string): Promise<string> => {
     return new Promise((resolve, reject) => {
         genSalt(saltRound, function (err, salt) {
             if (err) reject(err);
@@ -55,7 +55,7 @@ export const checkPassword = (encoded: string, input: string) => {
     })
 }
 
-export const uploadToS3Bucket = async (data: IS3FileUpload): Promise<any> => {
+export const uploadToS3Bucket = async (data: IS3FileUpload): Promise<string | any> => {
     return new Promise(async (resolve, reject) => {
         try {
             const {

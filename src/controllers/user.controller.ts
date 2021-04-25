@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import { User } from '../models/User'
 import { Responses } from '../utils/Response'
 import { USER } from './../utils/messages';
 import {
@@ -9,16 +8,18 @@ import {
 	uploadToS3Bucket
 } from './../utils/helper';
 import logger from '../services/logger.service'
+import { getRepository } from 'typeorm';
+import { User } from '../entity/User';
 
 export class UserController extends Responses {
-	public normallogin = async (req: Request, res: Response, next: NextFunction) => {
+	public login = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const {
-				userName,
+				username,
 				password
 			} = req.body
 
-			const exist_user = await User.findOne({ userName })
+			const exist_user = await getRepository(User).findOne({ username })
 			if (!exist_user) {
 				return this.failed(res, {}, USER.NOT_FOUND, 400)
 			}
@@ -32,21 +33,19 @@ export class UserController extends Responses {
 
 			this.success(res, { user: exist_user, auth: token });
 		} catch (error) {
-			console.log(error)
 			logger.error('[normallogin]', error)
 		}
 	}
 
-	public normalsignup = async (req: Request, res: Response, next: NextFunction) => {
+	public signup = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const {
 				email,
 				password,
-				userName,
-				dateOfBirth,
+				username,
 			} = req.body;
 
-			const exist_user = await User.findOne({ userName })
+			const exist_user = await getRepository(User).findOne({ username })
 
 			if (exist_user) {
 				return this.failed(res, {}, USER.ALREADY_REGISTERED, 400)
@@ -54,14 +53,14 @@ export class UserController extends Responses {
 
 			const hashPass = await generatePassword(password);
 
-			const createUser = new User({
+			const user = getRepository(User).create({
 				email,
+				username,
 				password: hashPass,
-				userName,
-				dateOfBirth,
+				isActive: true,
 			})
 
-			const createdUser = await createUser.save();
+			const createdUser = getRepository(User).save(user);
 
 			const token = generate_tokens(createdUser);
 
@@ -70,7 +69,6 @@ export class UserController extends Responses {
 
 			this.success(res, { user: createdUser, auth: token });
 		} catch (error) {
-			console.log(error)
 			logger.error('[normalsignup]', error)
 		}
 	}
@@ -80,10 +78,10 @@ export class UserController extends Responses {
 			const {
 				provider,
 				socialId,
-				userName
+				username
 			} = req.body
 
-			const exist_user = await User.findOne({ socialId })
+			const exist_user = await getRepository(User).findOne({ social_id: socialId })
 
 			if (exist_user) {
 				const token = generate_tokens(exist_user);
@@ -92,13 +90,14 @@ export class UserController extends Responses {
 				this.success(res, { user: exist_user, auth: token });
 			}
 
-			const createUser = new User({
+			const user = getRepository(User).create({
+				username,
+				isActive: true,
 				provider,
-				socialId,
-				userName
+				social_id: socialId
 			})
 
-			const createdUser = await createUser.save();
+			const createdUser = getRepository(User).save(user);
 
 			const token = generate_tokens(createdUser);
 			// @ts-ignore
@@ -106,7 +105,6 @@ export class UserController extends Responses {
 
 			this.success(res, { user: createdUser, auth: token });
 		} catch (error) {
-			console.log(error)
 			logger.error('[socialSignup]', error)
 		}
 	}
@@ -114,10 +112,10 @@ export class UserController extends Responses {
 	public checkUserName = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const {
-				userName
+				username
 			} = req.body;
 
-			const check = await User.findOne({ userName });
+			const check = await getRepository(User).findOne({ username });
 
 			if (!check) {
 				return this.failed(res, {}, USER.FOUND, 200, true);
@@ -135,10 +133,9 @@ export class UserController extends Responses {
 			const {
 				email,
 				password,
-				userName,
-				dateOfBirth,
-				firstName,
-				lastName,
+				username,
+				firstname,
+				lastname,
 			} = req.body;
 
 			const { profilePic } = req.files
@@ -147,22 +144,20 @@ export class UserController extends Responses {
 				bucketPath: 'user-profile-pics', file: profilePic
 			})
 
-			const updatedUser = await User.findByIdAndUpdate(
-				req.user._id,
+			const updatedUser = await getRepository(User).update(
+				req.user.id,
 				{
 					email,
 					password,
-					userName,
-					dateOfBirth,
-					firstName,
-					lastName,
-					profilePic: fileUpload
+					username,
+					firstname,
+					lastname,
+					profile_pic: fileUpload
 				}
 			)
 
 			this.success(res, { user: updatedUser });
 		} catch (error) {
-			console.log(error)
 			logger.error('[updateUser]', error)
 		}
 	}

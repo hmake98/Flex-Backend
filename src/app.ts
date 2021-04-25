@@ -1,20 +1,20 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
-import morgan from 'morgan';
+import morgan, { StreamOptions } from 'morgan';
 import { UserRoutes } from './routes/user.route';
-import { PostRoutes } from './routes/post.route';
+import logger from './services/logger.service';
+import { createConnection } from "typeorm";
+import { db } from './configs/keys';
 
 class App {
     public app: Application;
     public user: UserRoutes = new UserRoutes();
-    public post: PostRoutes = new PostRoutes();
 
     constructor() {
         this.app = express();
         this.initilizeMiddlewares();
         this.user.routes(this.app);
-        this.post.routes(this.app);
         this.initilizeErrorHandler();
     }
 
@@ -24,7 +24,18 @@ class App {
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(cors());
         this.app.use(helmet());
-        this.app.use(morgan("dev"));
+
+        const stream: StreamOptions = {
+            write: (message) => logger.http(message),
+        };
+
+        // Build the morgan middleware
+        const morganMiddleware = morgan(
+            ':method :url :status :res[content-length] - :response-time ms',
+            { stream }
+        );
+
+        this.app.use(morganMiddleware);
     }
 
     private initilizeErrorHandler = () => {
@@ -54,7 +65,7 @@ declare global {
         export interface Request {
             files: any;
             user: {
-                _id: any,
+                id: number,
                 email: string,
                 userName: string
             };
@@ -63,3 +74,4 @@ declare global {
 }
 
 export default new App().app;
+
